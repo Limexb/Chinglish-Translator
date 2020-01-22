@@ -4,7 +4,7 @@ except ImportError: #判断是否抛出异常
     print("requests模块不存在，正在自动安装……")
     import os
     package_name = 'requests' #定义变量package_name（用于下面安装requests模块）
-    os.system(f'pip install {package_name}')#调用pip安装requests模块
+    os.system(f'pip install -i https://pypi.tuna.tsinghua.edu.cn/simple {package_name}')#调用pip安装requests模块
     import requests
 try:
     import tkinter #尝试导入requests，若库不存在会报错抛出异常
@@ -12,8 +12,16 @@ except ImportError: #判断是否抛出异常
     print("tkinter模块不存在，正在自动安装……")
     import os
     package_name = 'tkinter' #定义变量package_name（用于下面安装tkinter模块）
-    os.system(f'pip install {package_name}')#调用pip安装tkinter模块
+    os.system(f'pip install -i https://pypi.tuna.tsinghua.edu.cn/simple {package_name}')#调用pip安装tkinter模块
     import requests
+try:
+    import jieba #尝试导入jieba，若库不存在会报错抛出异常
+except ImportError: #判断是否抛出异常
+    print("jieba模块不存在，正在自动安装……")
+    import os
+    package_name = 'jieba' #定义变量package_name（用于下面安装jieba模块）
+    os.system(f'pip install -i https://pypi.tuna.tsinghua.edu.cn/simple {package_name}')#调用pip安装jieba模块
+    import jieba
 
 import requests
 from requests.exceptions import RequestException
@@ -39,10 +47,13 @@ class Translate():
     def fanyi(self):
         """定义一个函数，完成翻译功能"""
         original_str = self.input.get()  # 定义一个变量，用来接收输入框输入的值
+        #关闭jieba日志输出
+        import logging
+        jieba.setLogLevel(logging.INFO)
         t=""
-        sys.stdout.write("\r " + " " * 60 + "\r") # /r 光标回到行首
-        sys.stdout.flush() #把缓冲区全部输出
-        for c in original_str:
+        t_list=jieba.cut(original_str,cut_all=False)
+        #for c in original_str:
+        for c in t_list:
             string = c
             data = {
             'doctype': 'json',
